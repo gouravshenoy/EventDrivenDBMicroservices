@@ -24,7 +24,7 @@ public class EntityDAOImpl implements EntityDAO {
 		try {
 			logger.info("Saving entity in database. Entity: " + entity);
 			// Connection details loaded from persistence.xml to create EntityManagerFactory.
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-customer");
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-order");
 
 			EntityManager em = emf.createEntityManager();
 
@@ -57,7 +57,7 @@ public class EntityDAOImpl implements EntityDAO {
 		
 		try {
 			// Connection details loaded from persistence.xml to create EntityManagerFactory.
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-customer");
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-order");
 
 			EntityManager em = emf.createEntityManager();
 
@@ -88,7 +88,7 @@ public class EntityDAOImpl implements EntityDAO {
 		List<Orders> orders = null;
 		try {
 			// Connection details loaded from persistence.xml to create EntityManagerFactory.
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-customer");
+			EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpa-order");
 
 			EntityManager em = emf.createEntityManager();
 

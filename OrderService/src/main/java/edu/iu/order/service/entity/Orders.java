@@ -17,7 +17,7 @@ public class Orders {
 	@Column
 	Integer orderAmount;
 	
-	@ManyToOne (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@ManyToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn (name = "customer_id")
 	Customer customer;
 	
