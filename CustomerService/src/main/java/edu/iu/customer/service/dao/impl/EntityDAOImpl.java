@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import edu.iu.customer.service.adapter.JPAThriftAdapter;
 import edu.iu.customer.service.dao.EntityDAO;
 import edu.iu.customer.service.entity.Customer;
 import edu.iu.customer.service.entity.Orders;
@@ -128,7 +129,11 @@ public class EntityDAOImpl implements EntityDAO {
 			
 			// get list of customers
 			List<Customer> customers = dao.getCustomers();
-			System.out.println(customers);
+			System.out.println("* Customers JPA List: " + customers);
+			System.out.println("* Printing Customers Thrift List: " + (customers.isEmpty() ? "empty" : ""));
+			for (Customer customer : customers) {
+				System.out.println("\t" + JPAThriftAdapter.getCustomerThriftDM(customer));
+			}
 		} catch (Exception ex) {
 			System.err.println("Exception occured: " + ex);
 		}
