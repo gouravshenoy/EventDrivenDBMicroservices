@@ -7,7 +7,7 @@ public class Constants {
     public static final String EXCHANGE_NAME = "edm.test";
     public static final String QUEUE_NAME = "test.queue";
     public static final String EXCHANGE_TYPE_TOPIC = "topic";
-    public static final String AMQP_URI = "amqp://airavata:airavata@gw56.iu.xsede.org:5672/testms";
+    public static final String AMQP_URI = "amqp://airavata:airavata@gw56.iu.xsede.org:5672/messaging";
     public static final String CONSUMER_TAG = "default";
     public static final boolean IS_DURABLE_QUEUE = true;
     public static final int PREFETCH_COUT = 20;
