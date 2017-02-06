@@ -33,7 +33,7 @@ public class CustomerServiceHandler implements CustomerService.Iface {
 				customers.add(JPAThriftAdapter.getCustomerThriftDM(customer));
 			}
 		} catch (Exception ex) {
-			logger.error("OrderServiceHandler.getOrders | exception: " + ex.getMessage(), ex);
+			logger.error("getOrders | exception: " + ex.getMessage(), ex);
 			throw new OperationFailedException("Get Orders operation failed: " + ex.getMessage());
 		}
 		logger.info("Returning list (thrift converted");
@@ -53,7 +53,7 @@ public class CustomerServiceHandler implements CustomerService.Iface {
 				throw new Exception ("Customer object null");
 			}
 		} catch (Exception ex) {
-			logger.error("CustomerServiceHandler.createCustomer | exception: " + ex.getMessage(), ex);
+			logger.error("createCustomer | exception: " + ex.getMessage(), ex);
 			throw new OperationFailedException("Create customer operation failed: " + ex.getMessage());
 		}
 	}

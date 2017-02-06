@@ -34,7 +34,7 @@ public class OrderServiceHandler implements OrderService.Iface{
 				orders.add(JPAThriftAdapter.getOrdersThriftDM(order));
 			}
 		} catch (Exception ex) {
-			logger.error("OrderServiceHandler.getOrders | exception: " + ex.getMessage(), ex);
+			logger.error("getOrders | exception: " + ex.getMessage(), ex);
 			throw new OperationFailedException("Get Orders operation failed: " + ex.getMessage());
 		}
 		logger.info("Returning list (thrift converted");
@@ -54,7 +54,7 @@ public class OrderServiceHandler implements OrderService.Iface{
 				throw new Exception ("Order object null");
 			}
 		} catch (Exception ex) {
-			logger.error("OrderServiceHandler.createOrder | exception: " + ex.getMessage(), ex);
+			logger.error("createOrder | exception: " + ex.getMessage(), ex);
 			throw new OperationFailedException("Create order operation failed: " + ex.getMessage());
 		}
 	}
