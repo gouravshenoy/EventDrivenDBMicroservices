@@ -25,7 +25,7 @@ public class CustomerServiceThriftServer {
 			TServer server = new TSimpleServer(new Args(serverTransport).processor(processor));
 			server.serve();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 	
@@ -46,7 +46,7 @@ public class CustomerServiceThriftServer {
 			logger.info("Starting thrift server for CustomerService");
 			new Thread(simple).start();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			logger.error(ex.getMessage(), ex);
 		}
 	}
 }
