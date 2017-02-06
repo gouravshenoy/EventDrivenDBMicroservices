@@ -12,7 +12,7 @@ public class Constants {
     public static final boolean IS_DURABLE_QUEUE = true;
     public static final int PREFETCH_COUT = 20;
     public static final String CUSTOMER_QUEUE = "customer.queue";
-    public static String ORDER_EXCHANGE_NAME = "exchange.order";
-    public static String CUSTOMER_EXCHANGE_NAME = "exchange.customer";
-    public static String ORDER_QUEUE = "order.queue";
+    public static final String ORDER_EXCHANGE_NAME = "exchange.order";
+    public static final String CUSTOMER_EXCHANGE_NAME = "exchange.customer";
+    public static final String ORDER_QUEUE = "order.queue";
 }
