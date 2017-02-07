@@ -30,21 +30,21 @@ import org.apache.log4j.Logger;
 import org.apache.thrift.TException;
 
 import java.io.IOException;
-import java.util.function.Function;
 
 public class RabbitMQPublisher implements Publisher {
 
     private static final Logger logger = LogManager.getLogger(RabbitMQPublisher.class);
 
-    private final Function<MessageContext, String> routingKeySupplier;
+    //private final Function<MessageContext, String> routingKeySupplier;
     private Connection connection;
     private final RabbitMQProperties properties;
     private Channel channel;
+    private String routingKey;
 
 
-    public RabbitMQPublisher(RabbitMQProperties properties, Function<MessageContext, String> routingKeySupplier) {
+    public RabbitMQPublisher(RabbitMQProperties properties, String routingKey) {
         this.properties = properties;
-        this.routingKeySupplier = routingKeySupplier;
+        this.routingKey = routingKey;
         connect();
     }
 
@@ -82,7 +82,7 @@ public class RabbitMQPublisher implements Publisher {
             Message message = new Message();
             message.setEvent(body);
             message.setMessageId(messageContext.getMessageId());
-            String routingKey = "rk.cutomer";//routingKeySupplier.apply(messageContext);
+
             byte[] messageBody = ThriftUtils.serializeThriftObject(message);
 
             send(messageBody, routingKey);

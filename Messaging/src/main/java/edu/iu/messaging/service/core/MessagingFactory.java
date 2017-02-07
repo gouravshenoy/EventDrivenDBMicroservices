@@ -84,19 +84,19 @@ public class MessagingFactory {
     public static Publisher getCustomerPublisher(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.CUSTOMER_EXCHANGE_NAME);
         logger.info("getCustomerPublisher() -> Fetching customer publisher. Routing Props : " + rProperties.toString());
-        return new RabbitMQPublisher(rProperties, messageContext -> rProperties.getExchangeName());
+        return new RabbitMQPublisher(rProperties, Constants.CUSTOMER_ROUTING_KEY);
     }
 
     public static Publisher getOrderPublisher(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.ORDER_EXCHANGE_NAME);
         logger.info("getOrderPublisher() -> Fetching order publisher. Routing Props : " + rProperties.toString());
-        return new RabbitMQPublisher(rProperties, messageContext -> rProperties.getExchangeName());
+        return new RabbitMQPublisher(rProperties, Constants.ORDER_ROUTING_KEY);
     }
 
     private static Subscriber getCustomerSubscriber(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.CUSTOMER_EXCHANGE_NAME)
                 .setQueueName(Constants.CUSTOMER_QUEUE)
-                .setAutoAck(false);
+                .setAutoAck(true);
         logger.info("getCustomerSubscriber() -> Fetching customer subscriber. Routing Props : " + rProperties.toString());
         return new RabbitMQSubscriber(rProperties);
 
@@ -105,7 +105,7 @@ public class MessagingFactory {
     private static Subscriber getOrderSubscriber(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.ORDER_EXCHANGE_NAME)
                 .setQueueName(Constants.ORDER_QUEUE)
-                .setAutoAck(false);
+                .setAutoAck(true);
         logger.info("getOrderSubscriber() -> Fetching order subscriber. Routing Props : " + rProperties.toString());
         return new RabbitMQSubscriber(rProperties);
 

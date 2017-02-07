@@ -4,7 +4,7 @@
 	<groupId>edu.iu.eventdrivendb</groupId>
 	<artifactId>OrderService</artifactId>
 	<version>1.0</version>
-	<name>CustomerService</name>
+	<name>OrderService</name>
 
 	<properties>
 		<!-- Version Information -->

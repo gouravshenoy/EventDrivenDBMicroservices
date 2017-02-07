@@ -63,12 +63,10 @@ public class CustomerConsumer extends QueueingConsumer {
             ThriftUtils.createThriftFromBytes(body, message);
             long deliveryTag = envelope.getDeliveryTag();
 
-            TBase event = null;
-            String gatewayId = null;
             Customer experimentEvent = new Customer();
             ThriftUtils.createThriftFromBytes(message.getEvent(), experimentEvent);
 
-            event = experimentEvent;
+            TBase event = experimentEvent;
             MessageContext messageContext = new MessageContext(event, message.getMessageId());
             handler.onMessage(messageContext);
             //sendAck(deliveryTag);
