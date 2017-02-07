@@ -52,7 +52,7 @@ public class CommonClient {
 				List<Customer> customerList = customerClient.getCustomers();
 				if (!customerList.isEmpty()) {
 					// generate random orderId
-					int orderId = random.nextInt();
+					int orderId = random.nextInt(999999999);
 					logger.info("Creating order with ID: " + orderId);
 					edu.iu.order.service.model.Customer customer = new edu.iu.order.service.model.Customer(
 							customerList.get(0).getId(), 
