@@ -15,4 +15,6 @@ public class Constants {
     public static final String ORDER_EXCHANGE_NAME = "exchange.order";
     public static final String CUSTOMER_EXCHANGE_NAME = "exchange.customer";
     public static final String ORDER_QUEUE = "order.queue";
+    public static final String ORDER_ROUTING_KEY = "rk.order";
+    public static final String CUSTOMER_ROUTING_KEY = "rk.customer";
 }

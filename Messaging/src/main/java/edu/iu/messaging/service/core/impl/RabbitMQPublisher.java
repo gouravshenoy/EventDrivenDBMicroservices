@@ -25,12 +25,16 @@ import edu.iu.messaging.service.core.Publisher;
 import edu.iu.messaging.service.model.Message;
 import edu.iu.messaging.service.util.RabbitMQProperties;
 import edu.iu.messaging.service.util.ThriftUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.thrift.TException;
 
 import java.io.IOException;
 import java.util.function.Function;
 
 public class RabbitMQPublisher implements Publisher {
+
+    private static final Logger logger = LogManager.getLogger(RabbitMQPublisher.class);
 
     private final Function<MessageContext, String> routingKeySupplier;
     private Connection connection;
@@ -46,6 +50,7 @@ public class RabbitMQPublisher implements Publisher {
 
     private void connect(){
         try {
+            logger.info("connect() -> Connecting to server");
             ConnectionFactory connectionFactory = new ConnectionFactory();
             connectionFactory.setUri(properties.getBrokerUrl());
             connectionFactory.setAutomaticRecoveryEnabled(properties.isAutoRecoveryEnable());
@@ -60,7 +65,7 @@ public class RabbitMQPublisher implements Publisher {
             channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("connect() -> Error connecting to server.", e);
         }
 
 
@@ -70,17 +75,23 @@ public class RabbitMQPublisher implements Publisher {
     @Override
     public void publish(MessageContext messageContext){
         try {
+
+            logger.info("publish() -> Publishing message. Message Id : " + messageContext.getMessageId());
+
             byte[] body = ThriftUtils.serializeThriftObject(messageContext.getEvent());
             Message message = new Message();
             message.setEvent(body);
             message.setMessageId(messageContext.getMessageId());
             String routingKey = "rk.cutomer";//routingKeySupplier.apply(messageContext);
             byte[] messageBody = ThriftUtils.serializeThriftObject(message);
+
             send(messageBody, routingKey);
+            logger.info("publish() -> Message Sent. Message Id : " + messageContext.getMessageId());
+
         } catch (TException e) {
-            e.printStackTrace();
+            logger.error("publish() -> Error publishing message.", e);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("publish() -> Error publishing message.", e);
         }
     }
 
@@ -88,7 +99,7 @@ public class RabbitMQPublisher implements Publisher {
         try {
             channel.basicPublish(properties.getExchangeName(), routingKey, MessageProperties.PERSISTENT_TEXT_PLAIN, message);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("send() -> Error sending message.", e);
         }
     }
 }

@@ -33,6 +33,7 @@ public class Stub {
         orders.setCustomer(cus);
         orders.setStatus("pending");
         MessageContext mctx = new MessageContext(orders, "order-1");
+        publisher.publish(mctx);
     }
 
     /**

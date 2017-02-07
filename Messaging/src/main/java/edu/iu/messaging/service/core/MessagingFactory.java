@@ -20,60 +20,76 @@
  */
 package edu.iu.messaging.service.core;
 
-import edu.iu.messaging.service.core.impl.MessageConsumer;
+import edu.iu.messaging.service.core.impl.CustomerConsumer;
+import edu.iu.messaging.service.core.impl.OrderConsumer;
 import edu.iu.messaging.service.core.impl.RabbitMQPublisher;
 import edu.iu.messaging.service.core.impl.RabbitMQSubscriber;
 import edu.iu.messaging.service.util.Constants;
 import edu.iu.messaging.service.util.RabbitMQProperties;
 import edu.iu.messaging.service.util.Type;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.util.List;
 
 public class MessagingFactory {
 
+    private static final Logger logger = LogManager.getLogger(MessagingFactory.class);
+
     public static Publisher getPublisher(Type type) {
+
+        logger.info("getPublisher() -> Creating Publisher. Type : " + type);
+
         RabbitMQProperties rProperties = getProperties();
-        Publisher publiser = null;
+        Publisher publisher = null;
         switch (type) {
             case ORDER:
-                publiser = getOrderPublisher(rProperties);
+                publisher = getOrderPublisher(rProperties);
                 break;
             case CUSTOMER:
-                publiser = getCustomerPublisher(rProperties);
+                publisher = getCustomerPublisher(rProperties);
                 break;
         }
 
-        return publiser;
+        logger.info("getPublisher() -> Publisher created. Type : " + type);
+        return publisher;
     }
 
     public static Subscriber getSubscriber(final MessageHandler messageHandler, List<String> routingKeys, Type type) {
+
+        logger.info("getSubscriber() -> Creating subscriber. Routing keys : " + routingKeys.toString() + ", Type : " + type);
+
         RabbitMQProperties rProperties = getProperties();
         Subscriber subscriber = null;
         switch (type) {
             case ORDER:
                 subscriber = getOrderSubscriber(rProperties);
-                subscriber.listen(((connection, channel) -> new MessageConsumer(messageHandler, connection, channel)),
+                subscriber.listen(((connection, channel) -> new OrderConsumer(messageHandler, connection, channel)),
                         rProperties.getQueueName(),
                         routingKeys);
                 break;
             case CUSTOMER:
                 subscriber = getCustomerSubscriber(rProperties);
-                subscriber.listen(((connection, channel) -> new MessageConsumer(messageHandler, connection, channel)),
+                subscriber.listen(((connection, channel) -> new CustomerConsumer(messageHandler, connection, channel)),
                         rProperties.getQueueName(),
                         routingKeys);
                 break;
         }
+
+        logger.debug("getSubscriber() -> Subscriber created. Routing keys : " + routingKeys.toString() + ", Type : " + type);
 
         return subscriber;
     }
 
     public static Publisher getCustomerPublisher(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.CUSTOMER_EXCHANGE_NAME);
+        logger.info("getCustomerPublisher() -> Fetching customer publisher. Routing Props : " + rProperties.toString());
         return new RabbitMQPublisher(rProperties, messageContext -> rProperties.getExchangeName());
     }
 
     public static Publisher getOrderPublisher(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.ORDER_EXCHANGE_NAME);
+        logger.info("getOrderPublisher() -> Fetching order publisher. Routing Props : " + rProperties.toString());
         return new RabbitMQPublisher(rProperties, messageContext -> rProperties.getExchangeName());
     }
 
@@ -81,6 +97,7 @@ public class MessagingFactory {
         rProperties.setExchangeName(Constants.CUSTOMER_EXCHANGE_NAME)
                 .setQueueName(Constants.CUSTOMER_QUEUE)
                 .setAutoAck(false);
+        logger.info("getCustomerSubscriber() -> Fetching customer subscriber. Routing Props : " + rProperties.toString());
         return new RabbitMQSubscriber(rProperties);
 
     }
@@ -89,6 +106,7 @@ public class MessagingFactory {
         rProperties.setExchangeName(Constants.ORDER_EXCHANGE_NAME)
                 .setQueueName(Constants.ORDER_QUEUE)
                 .setAutoAck(false);
+        logger.info("getOrderSubscriber() -> Fetching order subscriber. Routing Props : " + rProperties.toString());
         return new RabbitMQSubscriber(rProperties);
 
     }

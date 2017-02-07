@@ -22,6 +22,8 @@ package edu.iu.messaging.service.core.impl;/*
 import com.rabbitmq.client.*;
 import edu.iu.messaging.service.core.Subscriber;
 import edu.iu.messaging.service.util.RabbitMQProperties;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,6 +33,8 @@ import java.util.function.BiFunction;
 
 
 public class RabbitMQSubscriber implements Subscriber {
+
+    private static final Logger logger = LogManager.getLogger(RabbitMQSubscriber.class);
 
     private Connection connection;
     private Channel channel;
@@ -44,6 +48,7 @@ public class RabbitMQSubscriber implements Subscriber {
 
     private void createConnection() {
         try {
+            logger.info("createConnection() -> Connecting to server");
             ConnectionFactory connectionFactory = new ConnectionFactory();
             connectionFactory.setUri(properties.getBrokerUrl());
             connectionFactory.setAutomaticRecoveryEnabled(properties.isAutoRecoveryEnable());
@@ -53,7 +58,7 @@ public class RabbitMQSubscriber implements Subscriber {
             channel.basicQos(20);
             channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("createConnection() -> Error connecting to server.", e);
         }
     }
 
@@ -94,7 +99,7 @@ public class RabbitMQSubscriber implements Subscriber {
             queueDetailMap.put(id, new QueueDetail(queueName, routingKeys));
             return id;
         } catch (IOException e) {
-           e.printStackTrace();
+            logger.error("listen() -> Error listening to queue. Queue Name : " + queueName, e);
         }
         return "-1";
     }
@@ -109,13 +114,16 @@ public class RabbitMQSubscriber implements Subscriber {
                 }
                 //channel.queueDelete(details.getQueueName(), true, true);
             } catch (IOException e) {
-               e.printStackTrace();
+                logger.error("stopListen() -> Error listening to queue. Id : " + id, e);
             }
         }
     }
 
     @Override
     public void sendAck(long deliveryTag) {
+
+        logger.info("sendAck() -> Sending ack. Delivery Tag : " + deliveryTag);
+
         try {
             if (channel.isOpen()){
                 channel.basicAck(deliveryTag,false);
@@ -125,7 +133,7 @@ public class RabbitMQSubscriber implements Subscriber {
                 channel.basicAck(deliveryTag, false);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("sendAck() -> Error sending ack. Delivery Tag : " + deliveryTag, e);
         }
     }
 

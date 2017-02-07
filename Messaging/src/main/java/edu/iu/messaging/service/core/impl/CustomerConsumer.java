@@ -27,20 +27,22 @@ import edu.iu.messaging.service.model.Customer;
 import edu.iu.messaging.service.model.Message;
 import edu.iu.messaging.service.model.Orders;
 import edu.iu.messaging.service.util.ThriftUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.apache.thrift.TBase;
 import org.apache.thrift.TException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class MessageConsumer extends QueueingConsumer {
+public class CustomerConsumer extends QueueingConsumer {
+
+    private static final Logger logger = LogManager.getLogger(CustomerConsumer.class);
 
     private MessageHandler handler;
     private Channel channel;
     private Connection connection;
 
-    public MessageConsumer(MessageHandler messageHandler, Connection connection, Channel channel) {
+    public CustomerConsumer(MessageHandler messageHandler, Connection connection, Channel channel) {
         super(channel);
         this.handler = messageHandler;
         this.connection = connection;
@@ -57,27 +59,29 @@ public class MessageConsumer extends QueueingConsumer {
         Message message = new Message();
 
         try {
+            logger.info("handleDelivery() -> Handling message delivery. Consumer Tag : " + consumerTag);
             ThriftUtils.createThriftFromBytes(body, message);
             long deliveryTag = envelope.getDeliveryTag();
 
             TBase event = null;
             String gatewayId = null;
-            Orders experimentEvent = new Orders();
+            Customer experimentEvent = new Customer();
             ThriftUtils.createThriftFromBytes(message.getEvent(), experimentEvent);
 
             event = experimentEvent;
             MessageContext messageContext = new MessageContext(event, message.getMessageId());
             handler.onMessage(messageContext);
-            sendAck(deliveryTag);
+            //sendAck(deliveryTag);
 
         } catch (TException e) {
-            e.printStackTrace();
+            logger.error("handleDelivery() -> Error handling delivery. Consumer Tag : " + consumerTag, e);
         }
 
     }
 
 
     private void sendAck(long deliveryTag){
+        logger.info("sendAck() -> Sending ack. Delivery Tag : " + deliveryTag);
         try {
             if (channel.isOpen()){
                 channel.basicAck(deliveryTag,false);
@@ -87,7 +91,7 @@ public class MessageConsumer extends QueueingConsumer {
                 channel.basicAck(deliveryTag, false);
             }
         } catch (IOException e) {
-             e.printStackTrace();
+            logger.error("sendAck() -> Error sending ack. Delivery Tag : " + deliveryTag, e);
         }
     }
 }

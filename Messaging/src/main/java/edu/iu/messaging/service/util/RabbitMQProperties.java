@@ -95,6 +95,7 @@ public class RabbitMQProperties {
         return this;
     }
 
+
     public enum EXCHANGE_TYPE{
         TOPIC("topic"),
         FANOUT("fanout");
@@ -104,5 +105,21 @@ public class RabbitMQProperties {
         EXCHANGE_TYPE(String type) {
             this.type = type;
         }
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("RabbitMQProperties{");
+        sb.append("brokerUrl='").append(brokerUrl).append('\'');
+        sb.append(", exchangeType=").append(exchangeType);
+        sb.append(", exchangeName='").append(exchangeName).append('\'');
+        sb.append(", prefetchCount=").append(prefetchCount);
+        sb.append(", durable=").append(durable);
+        sb.append(", queueName='").append(queueName).append('\'');
+        sb.append(", consumerTag='").append(consumerTag).append('\'');
+        sb.append(", autoRecoveryEnable=").append(autoRecoveryEnable);
+        sb.append(", autoAck=").append(autoAck);
+        sb.append('}');
+        return sb.toString();
     }
 }
