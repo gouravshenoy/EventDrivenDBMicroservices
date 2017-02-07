@@ -3,6 +3,7 @@ package edu.iu.order.service.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.iu.messaging.service.MessageContext;
 import edu.iu.messaging.service.core.MessagingFactory;
 import edu.iu.messaging.service.core.Publisher;
 import edu.iu.messaging.service.core.Subscriber;
@@ -64,8 +65,11 @@ public class OrderServiceHandler implements OrderService.Iface{
 			if (order != null) {
 				logger.info("Creating order entry in DB: " + order);
 				DAO.saveEntity(JPAThriftAdapter.getOrdersJPAEntity(order));
-				
-				// TODO: publish message to sync customer db
+
+				logger.info("Publishing new order to outside world: " + order);
+				MessageContext mctx = new MessageContext(order, order.getCustomer().getCustomerName());
+				orderPublisher.publish(mctx);
+
 			} else {
 				throw new Exception ("Order object null");
 			}
