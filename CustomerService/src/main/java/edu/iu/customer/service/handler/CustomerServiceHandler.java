@@ -64,7 +64,7 @@ public class CustomerServiceHandler implements CustomerService.Iface {
 			if (customer != null) {
 
 				logger.info("Creating customer entry in DB: " + customer);
-				DAO.saveEntity(customer);
+				DAO.saveEntity(JPAThriftAdapter.getCustomerJPAEntity(customer));
 
 				logger.info("Publishing new customer to outside world: " + customer);
 				MessageContext mctx = new MessageContext(customer, customer.getCustomerName());

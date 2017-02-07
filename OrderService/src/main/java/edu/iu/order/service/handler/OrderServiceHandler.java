@@ -63,7 +63,7 @@ public class OrderServiceHandler implements OrderService.Iface{
 			// save order in db
 			if (order != null) {
 				logger.info("Creating order entry in DB: " + order);
-				DAO.saveEntity(order);
+				DAO.saveEntity(JPAThriftAdapter.getOrdersJPAEntity(order));
 				
 				// TODO: publish message to sync customer db
 			} else {

@@ -10,7 +10,6 @@ import javax.persistence.Id;
 public class Customer {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	Integer ID;
 	
 	@Column

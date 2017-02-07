@@ -27,7 +27,7 @@ public class CommonClient {
 	public static void createCustomer(CustomerService.Client customerClient) throws TException {
 		if (customerClient != null) {
 			// generate random customerId
-			int customerId = random.nextInt();
+			int customerId = random.nextInt(999999999);
 			logger.info("Creating customer with ID: " + customerId);
 			Customer customer = new Customer(customerId, "TestCustomer-" + customerId, 5000);
 			customerClient.createCustomer(customer);
@@ -82,6 +82,10 @@ public class CommonClient {
 		TTransport transportCustomer = new TSocket("127.0.0.1", 9091);
 		
 		try {
+			logger.info("Opening transport for Customer & Order");
+			transportOrder.open();
+			transportCustomer.open();
+			
 			TProtocol protocolCustomer = new TBinaryProtocol(transportCustomer);
 			TProtocol protocolOrder = new TBinaryProtocol(transportOrder);
 			
