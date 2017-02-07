@@ -118,21 +118,21 @@ public class EntityDAOImpl implements EntityDAO {
 		EntityDAO dao = new EntityDAOImpl();
 		
 		// create customer
-//		Customer customer = new Customer();
-//		customer.setCustomerName("Customer-A");
-//		customer.setCreditLimit(5000);
+		Customer customer = new Customer();
+		customer.setCustomerName("Customer-A");
+		customer.setCreditLimit(5000);
 		
 		try {
 			// persist in db
-//			dao.saveEntity(customer);
-//			System.out.println("Customer record saved!");
+			dao.saveEntity(customer);
+			System.out.println("Customer record saved!");
 			
 			// get list of customers
 			List<Customer> customers = dao.getCustomers();
 			System.out.println("* Customers JPA List: " + customers);
 			System.out.println("* Printing Customers Thrift List: " + (customers.isEmpty() ? "empty" : ""));
-			for (Customer customer : customers) {
-				System.out.println("\t " + JPAThriftAdapter.getCustomerThriftDM(customer));
+			for (Customer cust : customers) {
+				System.out.println("\t " + JPAThriftAdapter.getCustomerThriftDM(cust));
 			}
 		} catch (Exception ex) {
 			System.err.println("Exception occured: " + ex);
