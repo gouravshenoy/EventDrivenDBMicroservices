@@ -2,9 +2,10 @@ package edu.iu.order.service.handler;
 
 import edu.iu.messaging.service.MessageContext;
 import edu.iu.messaging.service.core.MessageHandler;
-import edu.iu.messaging.service.model.Customer;
 import edu.iu.messaging.service.util.ThriftUtils;
+import edu.iu.order.service.adapter.JPAThriftAdapter;
 import edu.iu.order.service.dao.impl.EntityDAOImpl;
+import edu.iu.order.service.model.Customer;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.thrift.TBase;
@@ -33,7 +34,7 @@ public class CustomerMessageHandler implements MessageHandler {
             ThriftUtils.createThriftFromBytes(bytes, customer);
 
             logger.info("onMessage() -> Received object. Customer : " + customer);
-            new EntityDAOImpl().saveEntity(customer);
+            new EntityDAOImpl().saveEntity(JPAThriftAdapter.getCustomerJPAEntity(customer));
             //System.out.println(customer);
 
         } catch (Exception e) {
