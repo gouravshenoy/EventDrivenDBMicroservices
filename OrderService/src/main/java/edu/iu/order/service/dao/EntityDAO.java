@@ -12,4 +12,6 @@ public interface EntityDAO {
 	public List<Customer> getCustomers() throws Exception;
 	
 	public List<Orders> getOrdersForCustomer(Integer customerId) throws Exception;
+	
+	public void createOrder(edu.iu.order.service.model.Orders order) throws Exception;
 }

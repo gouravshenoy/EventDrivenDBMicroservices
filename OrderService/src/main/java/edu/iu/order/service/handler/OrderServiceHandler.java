@@ -3,12 +3,6 @@ package edu.iu.order.service.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.iu.messaging.service.MessageContext;
-import edu.iu.messaging.service.core.MessagingFactory;
-import edu.iu.messaging.service.core.Publisher;
-import edu.iu.messaging.service.core.Subscriber;
-import edu.iu.messaging.service.util.Constants;
-import edu.iu.messaging.service.util.Type;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.thrift.TException;
@@ -24,17 +18,6 @@ public class OrderServiceHandler implements OrderService.Iface{
 
 	private static final EntityDAO DAO = new EntityDAOImpl();
 	private static final Logger logger = LogManager.getLogger(OrderServiceHandler.class);
-	private Publisher orderPublisher;
-	private Subscriber customerSubscriber;
-
-	public OrderServiceHandler(){
-		orderPublisher = MessagingFactory.getPublisher(Type.ORDER);
-		customerSubscriber = MessagingFactory.getSubscriber(new CustomerMessageHandler(), getRoutingKeys(), Type.CUSTOMER);
-	}
-
-	public List<String> getRoutingKeys(){
-		return new ArrayList<String>(){{add(Constants.CUSTOMER_ROUTING_KEY);}};
-	}
 
 	@Override
 	public List<Orders> getOrdersForCustomer(String customerId) throws OperationFailedException, TException {
@@ -64,12 +47,7 @@ public class OrderServiceHandler implements OrderService.Iface{
 			// save order in db
 			if (order != null) {
 				logger.info("Creating order entry in DB: " + order);
-				DAO.saveEntity(JPAThriftAdapter.getOrdersJPAEntity(order));
-
-				logger.info("Publishing new order to outside world: " + order);
-				MessageContext mctx = new MessageContext(order, order.getCustomer().getCustomerName());
-				orderPublisher.publish(mctx);
-
+				DAO.createOrder(order);
 			} else {
 				throw new Exception ("Order object null");
 			}

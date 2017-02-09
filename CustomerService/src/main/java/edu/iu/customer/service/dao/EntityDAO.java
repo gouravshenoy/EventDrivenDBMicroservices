@@ -9,6 +9,8 @@ public interface EntityDAO {
 
 	public void saveEntity(Object entity) throws Exception;
 	
+	public void createCustomer(edu.iu.customer.service.model.Customer customer) throws Exception;
+	
 	public List<Customer> getCustomers() throws Exception;
 	
 	public List<Orders> getOrdersForCustomer(Integer customerId) throws Exception;

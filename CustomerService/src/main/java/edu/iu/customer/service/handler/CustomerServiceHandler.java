@@ -3,12 +3,6 @@ package edu.iu.customer.service.handler;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.iu.messaging.service.MessageContext;
-import edu.iu.messaging.service.core.MessagingFactory;
-import edu.iu.messaging.service.core.Publisher;
-import edu.iu.messaging.service.core.Subscriber;
-import edu.iu.messaging.service.util.Constants;
-import edu.iu.messaging.service.util.Type;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.thrift.TException;
@@ -25,17 +19,6 @@ public class CustomerServiceHandler implements CustomerService.Iface {
 	
 	private static final EntityDAO DAO = new EntityDAOImpl();
 	private static final Logger logger = LogManager.getLogger(CustomerServiceHandler.class);
-	private Publisher customerPublisher;
-	private Subscriber orderSubscriber;
-
-	public CustomerServiceHandler(){
-		customerPublisher = MessagingFactory.getPublisher(Type.CUSTOMER);
-		orderSubscriber = MessagingFactory.getSubscriber(new OrderMessageHandler(), getRoutingKeys(), Type.ORDER);
-	}
-
-	public List<String> getRoutingKeys(){
-		return new ArrayList<String>(){{add(Constants.ORDER_ROUTING_KEY);}};
-	}
 
 	@Override
 	public List<Customer> getCustomers() throws OperationFailedException, TException {
@@ -62,14 +45,8 @@ public class CustomerServiceHandler implements CustomerService.Iface {
 		try {
 			// save customer in db
 			if (customer != null) {
-
 				logger.info("Creating customer entry in DB: " + customer);
-				DAO.saveEntity(JPAThriftAdapter.getCustomerJPAEntity(customer));
-
-				logger.info("Publishing new customer to outside world: " + customer);
-				MessageContext mctx = new MessageContext(customer, customer.getCustomerName());
-				customerPublisher.publish(mctx);
-
+				DAO.createCustomer(customer);
 			} else {
 				throw new Exception ("Customer object null");
 			}
