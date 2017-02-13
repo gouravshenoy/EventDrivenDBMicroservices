@@ -21,11 +21,10 @@
 package edu.iu.messaging.service.core.impl;
 
 import com.rabbitmq.client.*;
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.MessageHandler;
 import edu.iu.messaging.service.model.Customer;
 import edu.iu.messaging.service.model.Message;
-import edu.iu.messaging.service.model.Orders;
 import edu.iu.messaging.service.util.ThriftUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -61,13 +60,12 @@ public class CustomerConsumer extends QueueingConsumer {
         try {
             logger.info("handleDelivery() -> Handling message delivery. Consumer Tag : " + consumerTag);
             ThriftUtils.createThriftFromBytes(body, message);
-            long deliveryTag = envelope.getDeliveryTag();
 
             Customer experimentEvent = new Customer();
             ThriftUtils.createThriftFromBytes(message.getEvent(), experimentEvent);
 
             TBase event = experimentEvent;
-            MessageContext messageContext = new MessageContext(event, message.getMessageId());
+            MessageContext messageContext = new MessageContext(event, message.getMessageId(), envelope.getDeliveryTag());
             handler.onMessage(messageContext);
             //sendAck(deliveryTag);
 

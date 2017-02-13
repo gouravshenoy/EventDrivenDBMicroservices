@@ -19,9 +19,7 @@ package edu.iu.messaging.service.core;/*
  *
  */
 
-import edu.iu.messaging.service.MessageContext;
-
-import java.util.List;
+import edu.iu.messaging.service.util.MessageContext;
 
 /**
  * This is the basic publisher interface.

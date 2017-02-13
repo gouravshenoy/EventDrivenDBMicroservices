@@ -20,7 +20,7 @@ package edu.iu.messaging.service.core.impl;/*
  */
 
 import com.rabbitmq.client.*;
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.Publisher;
 import edu.iu.messaging.service.model.Message;
 import edu.iu.messaging.service.util.RabbitMQProperties;

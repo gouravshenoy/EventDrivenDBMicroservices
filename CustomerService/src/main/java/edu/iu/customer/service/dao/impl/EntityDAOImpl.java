@@ -17,7 +17,7 @@ import edu.iu.customer.service.dao.EntityDAO;
 import edu.iu.customer.service.entity.Customer;
 import edu.iu.customer.service.entity.Orders;
 import edu.iu.customer.service.handler.OrderMessageHandler;
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.MessagingFactory;
 import edu.iu.messaging.service.core.Publisher;
 import edu.iu.messaging.service.core.Subscriber;
@@ -46,7 +46,7 @@ public class EntityDAOImpl implements EntityDAO {
 	}
 	
 	@Override
-	public void saveEntity(Object entity) throws Exception {
+	public void saveEntity(Object entity, long deliveryTag) throws Exception {
 		try {
 			logger.info("Saving entity in database. Entity: " + entity);
 			// Connection details loaded from persistence.xml to create EntityManagerFactory.
@@ -62,9 +62,12 @@ public class EntityDAOImpl implements EntityDAO {
 			// Persisting the entity object.
 			em.merge(entity);
 
+			logger.info("saveEntity() -> Sending ack. Delivery Tag : " + deliveryTag);
+			orderSubscriber.sendAck(deliveryTag);
+
 			// Committing transaction.
 			tx.commit();
-			
+
 			logger.info("DB persist successful; closing connections now!");
 
 			// Closing connection.

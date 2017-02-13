@@ -1,9 +1,9 @@
 edu/iu/messaging/service/model/Message.class
 edu/iu/messaging/service/core/impl/RabbitMQSubscriber.class
+edu/iu/messaging/service/util/MessageContext.class
 edu/iu/messaging/service/model/Message$MessageStandardSchemeFactory.class
 edu/iu/messaging/service/model/Orders$OrdersTupleSchemeFactory.class
 edu/iu/messaging/service/model/Orders$OrdersStandardScheme.class
-edu/iu/messaging/service/MessageContext.class
 edu/iu/messaging/service/model/Message$MessageTupleSchemeFactory.class
 edu/iu/messaging/service/core/impl/RabbitMQPublisher.class
 edu/iu/messaging/service/model/Customer$1.class

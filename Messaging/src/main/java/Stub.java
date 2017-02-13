@@ -1,7 +1,7 @@
 /**
  * Created by Ajinkya on 2/2/17.
  */
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.MessageHandler;
 import edu.iu.messaging.service.core.MessagingFactory;
 import edu.iu.messaging.service.core.Publisher;

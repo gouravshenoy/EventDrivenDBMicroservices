@@ -1,6 +1,6 @@
 package edu.iu.order.service.handler;
 
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.MessageHandler;
 import edu.iu.messaging.service.util.ThriftUtils;
 import edu.iu.order.service.adapter.JPAThriftAdapter;
@@ -10,17 +10,20 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.thrift.TBase;
 
+
 /**
  * Created by Ajinkya on 2/6/17.
  */
+
 public class CustomerMessageHandler implements MessageHandler {
 
     private static final Logger logger = LogManager.getLogger(CustomerMessageHandler.class);
 
-    /**
+    /*
      * This method only handle MessageType.PROCESS type messages.
      * @param message
      */
+
     @Override
     public void onMessage(MessageContext message) {
 
@@ -34,7 +37,7 @@ public class CustomerMessageHandler implements MessageHandler {
             ThriftUtils.createThriftFromBytes(bytes, customer);
 
             logger.info("onMessage() -> Received object. Customer : " + customer);
-            new EntityDAOImpl().saveEntity(JPAThriftAdapter.getCustomerJPAEntity(customer));
+            new EntityDAOImpl().saveEntity(JPAThriftAdapter.getCustomerJPAEntity(customer), message.getDeliveryTag());
             //System.out.println(customer);
 
         } catch (Exception e) {
@@ -42,3 +45,4 @@ public class CustomerMessageHandler implements MessageHandler {
         }
     }
 }
+

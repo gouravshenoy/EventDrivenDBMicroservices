@@ -16,7 +16,7 @@ import edu.iu.customer.service.model.OperationFailedException;
 
 
 public class CustomerServiceHandler implements CustomerService.Iface {
-	
+
 	private static final EntityDAO DAO = new EntityDAOImpl();
 	private static final Logger logger = LogManager.getLogger(CustomerServiceHandler.class);
 
@@ -27,7 +27,7 @@ public class CustomerServiceHandler implements CustomerService.Iface {
 			// get orders list from db
 			List<edu.iu.customer.service.entity.Customer> customerList = DAO.getCustomers();
 			logger.info("Fetched customers from DB, JPA list: " + customerList);
-			
+
 			// convert from JPA to Thrift
 			for (edu.iu.customer.service.entity.Customer customer : customerList) {
 				customers.add(JPAThriftAdapter.getCustomerThriftDM(customer));

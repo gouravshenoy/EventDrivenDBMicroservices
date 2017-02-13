@@ -7,7 +7,7 @@ import edu.iu.customer.service.entity.Orders;
 
 public interface EntityDAO {
 
-	public void saveEntity(Object entity) throws Exception;
+	public void saveEntity(Object entity, long deliveryTag) throws Exception;
 	
 	public void createCustomer(edu.iu.customer.service.model.Customer customer) throws Exception;
 	

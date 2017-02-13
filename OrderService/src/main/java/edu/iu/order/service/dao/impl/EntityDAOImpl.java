@@ -9,10 +9,11 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
+import edu.iu.order.service.handler.CustomerMessageHandler;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.MessagingFactory;
 import edu.iu.messaging.service.core.Publisher;
 import edu.iu.messaging.service.core.Subscriber;
@@ -22,7 +23,6 @@ import edu.iu.order.service.adapter.JPAThriftAdapter;
 import edu.iu.order.service.dao.EntityDAO;
 import edu.iu.order.service.entity.Customer;
 import edu.iu.order.service.entity.Orders;
-import edu.iu.order.service.handler.CustomerMessageHandler;
 
 public class EntityDAOImpl implements EntityDAO {
 
@@ -47,7 +47,7 @@ public class EntityDAOImpl implements EntityDAO {
 	}
 	
 	@Override
-	public void saveEntity(Object entity) throws Exception {
+	public void saveEntity(Object entity, long deliveryTag) throws Exception {
 		try {
 			logger.info("Saving entity in database. Entity: " + entity);
 			// Connection details loaded from persistence.xml to create EntityManagerFactory.
@@ -63,9 +63,13 @@ public class EntityDAOImpl implements EntityDAO {
 			// Persisting the entity object.
 			em.merge(entity);
 
+			logger.info("saveEntity() -> Sending ack. Delivery Tag : " + deliveryTag);
+			customerSubscriber.sendAck(deliveryTag);
+
 			// Committing transaction.
 			tx.commit();
-			
+
+
 			logger.info("DB persist successful; closing connections now!");
 
 			// Closing connection.

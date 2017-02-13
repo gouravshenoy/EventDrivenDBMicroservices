@@ -21,7 +21,7 @@
 
 package edu.iu.messaging.service.core;
 
-import edu.iu.messaging.service.MessageContext;
+import edu.iu.messaging.service.util.MessageContext;
 
 @FunctionalInterface
 public interface MessageHandler {

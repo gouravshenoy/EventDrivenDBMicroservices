@@ -25,10 +25,10 @@ public class OrderServiceHandler implements OrderService.Iface{
 		logger.info("Getting orders for customer id: " + customerId);
 		try {
 			// get orders list from db
-			List<edu.iu.order.service.entity.Orders> ordersList = 
+			List<edu.iu.order.service.entity.Orders> ordersList =
 					DAO.getOrdersForCustomer(Integer.parseInt(customerId));
 			logger.info("Fetched orders from DB, JPA list: " + ordersList);
-			
+
 			// convert from JPA to Thrift
 			for (edu.iu.order.service.entity.Orders order : ordersList) {
 				orders.add(JPAThriftAdapter.getOrdersThriftDM(order));
