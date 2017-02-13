@@ -120,20 +120,16 @@ public class RabbitMQSubscriber implements Subscriber {
     }
 
     @Override
-    public void sendAck(long deliveryTag) {
+    public void sendAck(long deliveryTag) throws IOException {
 
-        logger.info("sendAck() -> Sending ack. Delivery Tag : " + deliveryTag);
+    logger.info("sendAck() -> Sending ack. Delivery Tag : " + deliveryTag);
 
-        try {
-            if (channel.isOpen()){
-                channel.basicAck(deliveryTag,false);
-            }else {
-                channel = connection.createChannel();
-                channel.basicQos(properties.getPrefetchCount());
-                channel.basicAck(deliveryTag, false);
-            }
-        } catch (IOException e) {
-            logger.error("sendAck() -> Error sending ack. Delivery Tag : " + deliveryTag, e);
+        if (channel.isOpen()){
+            channel.basicAck(deliveryTag,false);
+        }else {
+            channel = connection.createChannel();
+            channel.basicQos(properties.getPrefetchCount());
+            channel.basicAck(deliveryTag, false);
         }
     }
 

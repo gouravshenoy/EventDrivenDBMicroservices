@@ -73,26 +73,19 @@ public class RabbitMQPublisher implements Publisher {
 
 
     @Override
-    public void publish(MessageContext messageContext){
-        try {
+    public void publish(MessageContext messageContext) throws Exception{
+        logger.info("publish() -> Publishing message. Message Id : " + messageContext.getMessageId());
 
-            logger.info("publish() -> Publishing message. Message Id : " + messageContext.getMessageId());
+        byte[] body = ThriftUtils.serializeThriftObject(messageContext.getEvent());
+        Message message = new Message();
+        message.setEvent(body);
+        message.setMessageId(messageContext.getMessageId());
 
-            byte[] body = ThriftUtils.serializeThriftObject(messageContext.getEvent());
-            Message message = new Message();
-            message.setEvent(body);
-            message.setMessageId(messageContext.getMessageId());
+        byte[] messageBody = ThriftUtils.serializeThriftObject(message);
 
-            byte[] messageBody = ThriftUtils.serializeThriftObject(message);
+        send(messageBody, routingKey);
+        logger.info("publish() -> Message Sent. Message Id : " + messageContext.getMessageId());
 
-            send(messageBody, routingKey);
-            logger.info("publish() -> Message Sent. Message Id : " + messageContext.getMessageId());
-
-        } catch (TException e) {
-            logger.error("publish() -> Error publishing message.", e);
-        } catch (Exception e) {
-            logger.error("publish() -> Error publishing message.", e);
-        }
     }
 
     public void send(byte []message, String routingKey) throws Exception {

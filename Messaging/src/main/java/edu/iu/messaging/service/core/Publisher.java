@@ -33,5 +33,5 @@ public interface Publisher {
      * @param messageContext object of message context which will include actual event and other information
      * @throws
      */
-    public void publish(MessageContext messageContext);
+    public void publish(MessageContext messageContext) throws Exception;
 }

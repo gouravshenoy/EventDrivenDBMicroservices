@@ -23,6 +23,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Consumer;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -43,6 +44,6 @@ public interface Subscriber {
 
     void stopListen(final String id);
 
-    void sendAck(long deliveryTag);
+    void sendAck(long deliveryTag) throws IOException;
 
 }
