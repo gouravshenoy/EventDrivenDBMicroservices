@@ -21,6 +21,7 @@
 package edu.iu.messaging.service.core.impl;
 
 import com.rabbitmq.client.*;
+import edu.iu.messaging.service.util.Constants;
 import edu.iu.messaging.service.util.MessageContext;
 import edu.iu.messaging.service.core.MessageHandler;
 import edu.iu.messaging.service.model.Customer;
@@ -83,7 +84,7 @@ public class CustomerConsumer extends QueueingConsumer {
                 channel.basicAck(deliveryTag,false);
             }else {
                 channel = connection.createChannel();
-                channel.basicQos(20);
+                channel.basicQos(Constants.PREFETCH_COUT);
                 channel.basicAck(deliveryTag, false);
             }
         } catch (IOException e) {

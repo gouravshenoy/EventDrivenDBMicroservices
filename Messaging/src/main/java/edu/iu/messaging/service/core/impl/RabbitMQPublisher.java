@@ -61,8 +61,12 @@ public class RabbitMQPublisher implements Publisher {
             });
 
             channel = connection.createChannel();
-            channel.basicQos(properties.getPrefetchCount());
-            channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
+
+            /*
+            Not required for work queue implementation
+             */
+            //channel.basicQos(properties.getPrefetchCount());
+            //channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
 
         } catch (Exception e) {
             logger.error("connect() -> Error connecting to server.", e);

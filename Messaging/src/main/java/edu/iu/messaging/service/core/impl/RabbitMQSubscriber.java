@@ -21,6 +21,7 @@ package edu.iu.messaging.service.core.impl;/*
 
 import com.rabbitmq.client.*;
 import edu.iu.messaging.service.core.Subscriber;
+import edu.iu.messaging.service.util.Constants;
 import edu.iu.messaging.service.util.RabbitMQProperties;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -55,8 +56,13 @@ public class RabbitMQSubscriber implements Subscriber {
             connection = connectionFactory.newConnection();
             addShutdownListener();
             channel = connection.createChannel();
-            channel.basicQos(20);
-            channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
+
+            /*
+            Not required for work queue implementation
+             */
+            //channel.basicQos(Constants.PREFETCH_COUT);
+            //channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
+
         } catch (Exception e) {
             logger.error("createConnection() -> Error connecting to server.", e);
         }
@@ -70,7 +76,11 @@ public class RabbitMQSubscriber implements Subscriber {
         try {
             if (!channel.isOpen()) {
                 channel = connection.createChannel();
-                channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
+
+                /*
+                Not required for work queue implementation
+                 */
+                //channel.exchangeDeclare(properties.getExchangeName(), properties.getExchangeType(), true);
             }
             if (queueName == null) {
                 queueName = channel.queueDeclare().getQueue();
