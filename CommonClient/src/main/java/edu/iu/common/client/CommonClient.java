@@ -93,7 +93,7 @@ public class CommonClient {
 			orderClient = new OrderService.Client(protocolOrder);
 			
 			// create customer test
-			//createCustomer(customerClient);
+			createCustomer(customerClient);
 			// create order test
 			createOrder(orderClient, customerClient);
 		} catch (Exception ex) {
