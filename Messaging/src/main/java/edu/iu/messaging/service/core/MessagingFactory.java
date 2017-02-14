@@ -96,7 +96,7 @@ public class MessagingFactory {
     private static Subscriber getCustomerSubscriber(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.CUSTOMER_EXCHANGE_NAME)
                 .setQueueName(Constants.CUSTOMER_QUEUE)
-                .setAutoAck(true);
+                .setAutoAck(false);
         logger.info("getCustomerSubscriber() -> Fetching customer subscriber. Routing Props : " + rProperties.toString());
         return new RabbitMQSubscriber(rProperties);
 
@@ -105,7 +105,7 @@ public class MessagingFactory {
     private static Subscriber getOrderSubscriber(RabbitMQProperties rProperties){
         rProperties.setExchangeName(Constants.ORDER_EXCHANGE_NAME)
                 .setQueueName(Constants.ORDER_QUEUE)
-                .setAutoAck(true);
+                .setAutoAck(false);
         logger.info("getOrderSubscriber() -> Fetching order subscriber. Routing Props : " + rProperties.toString());
         return new RabbitMQSubscriber(rProperties);
 
