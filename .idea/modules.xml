@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/CommonClient/CommonClient.iml" filepath="$PROJECT_DIR$/CommonClient/CommonClient.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomerService/CustomerService.iml" filepath="$PROJECT_DIR$/CustomerService/CustomerService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OrderService/OrderService.iml" filepath="$PROJECT_DIR$/OrderService/OrderService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Messaging/RabbitMQ.iml" filepath="$PROJECT_DIR$/Messaging/RabbitMQ.iml" />
+    </modules>
+  </component>
+</project>

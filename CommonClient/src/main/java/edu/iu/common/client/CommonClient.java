@@ -83,7 +83,7 @@ public class CommonClient {
 		
 		try {
 			logger.info("Opening transport for Customer & Order");
-			transportOrder.open();
+			//transportOrder.open();
 			transportCustomer.open();
 			
 			TProtocol protocolCustomer = new TBinaryProtocol(transportCustomer);
@@ -95,7 +95,7 @@ public class CommonClient {
 			// create customer test
 			createCustomer(customerClient);
 			// create order test
-			createOrder(orderClient, customerClient);
+			//createOrder(orderClient, customerClient);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage(), ex);
 		} finally {
